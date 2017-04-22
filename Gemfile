@@ -14,6 +14,7 @@ gemspec
 gem 'byebug', group: [:development, :test]
 
 
+gem 'sqlite3'
 gem 'rspec-rails', '~> 3.5.1'
 gem 'factory_girl_rails'
 gem 'faker-japanese'
