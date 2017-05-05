@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170402125148) do
+ActiveRecord::Schema.define(version: 20170505035852) do
+
+  create_table "towing_tractor_docker_containers", force: :cascade do |t|
+    t.integer "image_id"
+    t.text "env"
+    t.text "cmd"
+    t.datetime "last_keepalived_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "towing_tractor_docker_images", force: :cascade do |t|
     t.string "name"
