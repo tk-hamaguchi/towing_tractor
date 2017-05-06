@@ -14,6 +14,8 @@ ActiveRecord::Schema.define(version: 20170505035852) do
 
   create_table "towing_tractor_docker_containers", force: :cascade do |t|
     t.integer "image_id"
+    t.integer "server_id"
+    t.string "container_id"
     t.text "env"
     t.text "cmd"
     t.datetime "last_keepalived_at"

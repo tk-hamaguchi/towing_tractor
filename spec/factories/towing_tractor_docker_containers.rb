@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :docker_container, class: 'TowingTractor::DockerContainer' do
-    image_id 1
-    env "MyText"
-    cmd "MyText"
-    last_keepalived_at "2017-05-05 12:58:52"
+    image_id  { FactoryGirl.create(:docker_image).id }
+    server_id { FactoryGirl.create(:docker_server).id }
+    env       { { hoge: 'FUGA', puki: 123 }.to_json }
+    cmd       { '"date"' }
   end
 end
