@@ -6,7 +6,7 @@ module TowingTractor
 
     let(:server) { double(TowingTractor::DockerServer, id: server_id) }
     let(:server_id) { double(Integer) }
-    let(:containers) { double(ActiveRecord::Relation) }
+    let(:containers) { double(ActiveRecord::Relation, find: container) }
     let(:container) { double(TowingTractor::DockerContainer, destroy: self) }
     let(:container_id) { double(Integer) }
     let(:image_id) { double(Integer) }
@@ -68,7 +68,8 @@ module TowingTractor
       subject { get :show, params: params }
       it { is_expected.to be_success }
       context 'TowingTractor::DockerContainer' do
-        it { expect(TowingTractor::DockerContainer).to receive(:find).with(container_id.to_s, condition: { server_id: server_id.to_s }) ; subject }
+        it { expect(TowingTractor::DockerContainer).to receive(:where).with(server_id: server_id.to_s) ; subject }
+        it { expect(containers).to receive(:find).with(container_id.to_s) ; subject }
       end
       context 'response' do
         subject { get :show, params: params ; response }
@@ -87,7 +88,8 @@ module TowingTractor
       subject { delete :destroy, params: params }
       it { is_expected.to be_success }
       context 'TowingTractor::DockerContainer' do
-        it { expect(TowingTractor::DockerContainer).to receive(:find).with(container_id.to_s, condition: { server_id: server_id.to_s }) ; subject }
+        it { expect(TowingTractor::DockerContainer).to receive(:where).with(server_id: server_id.to_s) ; subject }
+        it { expect(containers).to receive(:find).with(container_id.to_s) ; subject }
       end
       context 'response' do
         subject { delete :destroy, params: params ; response }

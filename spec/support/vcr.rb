@@ -5,6 +5,7 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.configure_rspec_metadata!
   #c.default_cassette_options = { record: :new_episodes }
+  #c.default_cassette_options = { record: :all }
   c.default_cassette_options = { record: :none }
 end
 

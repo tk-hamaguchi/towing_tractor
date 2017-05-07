@@ -2,13 +2,14 @@ require_dependency 'towing_tractor/application_controller'
 
 module TowingTractor
   class Servers::ContainersController < ServersController
+    before_action :set_container, only: %i(show destroy start stop logs status)
+
     def index
       @containers = DockerContainer.where(server_id: params[:server_id])
       render json: { containers: @containers }
     end
 
     def show
-      @container = docker_container
       render json: { container: @container }
     end
 
@@ -18,12 +19,33 @@ module TowingTractor
     end
 
     def destroy
-      @container = docker_container
       @container.destroy
       render json: { container: @container }
     end
 
+    def start
+      @container.start
+      render nothing: true, status: :accepted
+    end
+
+    def stop
+      @container.stop
+      render nothing: true, status: :accepted
+    end
+
+    def logs
+      logs = @container.logs
+      render json: { container: { id: @container.id, logs: logs } }
+    end
+
+    def status
+    end
+
     private
+
+    def set_container
+      @container = docker_container
+    end
 
     def docker_server
       @docer_server ||= DockerServer.find(
@@ -32,10 +54,8 @@ module TowingTractor
     end
 
     def docker_container
-      @docker_container ||= DockerContainer.find(
-        params[:id],
-        condition: { server_id: params[:server_id] }
-      )
+      @docker_container ||= DockerContainer.where(server_id: params[:server_id])
+                                           .find(params[:id])
     end
 
     def container_params
