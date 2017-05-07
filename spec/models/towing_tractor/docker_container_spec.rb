@@ -118,7 +118,7 @@ module TowingTractor
             expect(Docker::Container).to receive(:create).with(
               {
                 'Image' => docker_container.image.image,
-                'Env'   => JSON.parse(docker_container.env),
+                'Env'   => JSON.parse(docker_container.env).each_with_object([]) { |item, obj| obj << item.join('=') },
                 'Cmd'   => JSON.parse(docker_container.cmd),
                 'Tty'   => true
               },

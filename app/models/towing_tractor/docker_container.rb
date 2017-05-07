@@ -42,13 +42,15 @@ module TowingTractor
     private
 
     def create_container_to_docker_server
+      c_params = {
+        'Image' => image.image,
+        'Env'   => JSON.parse(self.env).each_with_object([]) { |item, obj| obj << item.join('=') },
+        'Cmd'   => JSON.parse(cmd),
+        'Tty'   => true
+      }
+
       c = Docker::Container.create(
-        {
-          'Image' => image.image,
-          'Env'   => JSON.parse(self.env),
-          'Cmd'   => JSON.parse(cmd),
-          'Tty'   => true
-        },
+        c_params,
         server.connection
       )
       self.container_id = c.id
